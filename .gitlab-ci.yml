@@ -1,0 +1,228 @@
+# docker image from https://github.com/DavidAnson/markdownlint-cli2
+# vscode markdownlint https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint
+# markdownlint-cli2: https://github.com/DavidAnson/markdownlint-cli2
+# markdownlint rules: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+# markdown-link-check: https://github.com/tcort/markdown-link-check
+#
+variables:
+  GITLAB_REPO: git@g.a-bug.org:maix_sw/k230_linux_sdk_docs.git
+  GITHUB_REPO: git@github.com:kendryte/k230_linux_sdk_docs.git
+  GITEE_REPO: git@gitee.com:kendryte/k230_linux_sdk_docs.git
+
+default:
+  interruptible: true
+  image: ai.b-bug.org:5000/k230_sdk:latest
+  tags:
+    - k230_sdk
+
+stages:
+  - lint
+  - build
+  - sync
+  - deploy
+
+# MR merged
+merge_sync:
+  stage: sync
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
+  extends:
+    - .setup_env
+    - .sync_github_gitee
+
+# release
+dev_to_main:
+  stage: sync
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+  extends:
+    - .setup_env
+    - .dev_to_main
+
+# tag push
+tag_sync:
+  stage: sync
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG =~ /^v\d+\.\d+.*$/
+  extends:
+    - .setup_env
+    - .sync_github_gitee
+
+# auto sync
+schedule_sync:
+  stage: sync
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  extends:
+    - .setup_env
+    - .sync_github_gitee
+
+# manual sync
+manual_sync:
+  stage: sync
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: always
+  extends:
+    - .setup_env
+    - .sync_github_gitee
+
+# new MR open
+markdown-link-check:
+  rules:
+    # MR job
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  stage: lint
+  timeout: 10m
+  retry: 2
+  image: ai.b-bug.org:5000/markdown:latest
+  script:
+    - uname -a
+    - whoami
+    - pwd
+    - git fetch
+    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
+    - echo $FILELIST
+    - time markdown-link-check -p -q -v $(find . -name \*.md)
+
+# new MR open
+markdownlint:
+  rules:
+    # MR job
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  stage: lint
+  timeout: 10m
+  image: ai.b-bug.org:5000/markdown:latest
+  script:
+    - uname -a
+    - whoami
+    - pwd
+    #- find . -name \*.md -print0 | xargs -0 markdownlint-cli2
+    - git fetch --tags
+    - FILELIST=$(git diff origin/dev --name-only -z --diff-filter=AM | grep "\\.md$" || true)
+    - echo $FILELIST
+    - markdownlint-cli2 $(find . -name \*.md)
+
+.setup_env:
+  before_script:
+    - echo '----------Build ENV Prepare----------'
+    - echo 'Add SSH KEY for Multiple repo'
+    - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | ssh-add - > ~/.ssh/id_ed25519 || exit 1
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n    StrictHostKeyChecking no\n" > ~/.ssh/config'
+    - echo $SHELL
+    - echo "increate ssh timeout for github"
+    - echo "    ServerAliveInterval 30" >> ~/.ssh/config
+    - echo "    ServerAliveCountMax 60" >> ~/.ssh/config
+    - echo "    TCPKeepAlive yes" >> ~/.ssh/config
+    - cat ~/.ssh/config
+    - whoami
+    - uptime
+    - pwd
+    - uname -a
+    - cat /etc/issue
+    - echo $CI_PROJECT_DIR
+    - echo $CI_PROJECT_NAME
+    - echo '----------set git config ----------'
+    - echo "${GITLAB_USER_EMAIL}"
+    - echo "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+
+.sync_github_gitee:
+  timeout: 30m
+  script:
+    - cd $CI_PROJECT_DIR
+    - ls -alht
+    - rm -rf ./k230_linux_sdk_docs/
+    - git clone ${GITLAB_REPO} k230_linux_sdk_docs || exit 1
+    - cd k230_linux_sdk_docs || exit 1
+    - pwd
+    - git checkout main
+    - git branch -a
+    - git status
+    - echo '---pull latest main branch---'
+    - git pull origin main
+    - echo '---fetch all tags---'
+    - git fetch --tags
+    - git remote add github ${GITHUB_REPO}
+    - git remote add gitee ${GITEE_REPO}
+    - git remote -v
+    - git branch -a
+    - git status
+    - echo "---push to gitee---"
+    - git push --atomic --tags -u -f gitee main || git push --atomic --tags -u -f gitee main
+    - echo "---push to github---"
+    - git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main || git push --atomic --tags -u -f github main
+
+.dev_to_main:
+  timeout: 30m
+  script:
+    - cd $CI_PROJECT_DIR
+    - ls -alht
+    - echo "----------Step 1, Check Merge Request Title, k230 sdk docs release v*.* MUST bt exist----------"
+    - echo "$CI_MERGE_REQUEST_TITLE"
+    - >
+      if [[ "$CI_MERGE_REQUEST_TITLE" =~ ^"k230 sdk docs release v[0-9]+\.[0-9]+".*$ ]];
+      then
+        echo "Merge Request title check PASS, continue get release version from merge request title";
+      else
+        echo "Merge Request title check FAILED, please EDIT title name with release tag";
+        echo "Title MUST be end with tag like: k230 sdk docs release v1.4";
+        exit 1;
+      fi
+    - RELEASE_TAG=$(echo $CI_MERGE_REQUEST_TITLE |grep -Eo "v[0-9]+\.[0-9]+.*?$")
+    - >
+      if [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+.*$ ]];
+      then
+        echo "Release TAG/version will be " $RELEASE_TAG;
+      else
+        echo "Release TAG/version check FAILED, please EDIT title name with release tag";
+        echo "Title MUST be end with tag like: k230 sdk docs release v1.4";
+        exit 1;
+      fi
+    - echo "----------sync dev branch to main branch for k230 sdk docs release----------"
+    - wget -qc https://ai.b-bug.org/k230/test_resources/ci/release/k230_docs_release.sh -O ./k230_docs_release.sh
+    - chmod +x ./k230_docs_release.sh
+    - ./k230_docs_release.sh $RELEASE_TAG "k230 sdk docs release $RELEASE_TAG" || exit 1
+    - echo "----------sync dev to main branch pass in k230 sdk docs repos----------"
+
+build web docs:
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
+  image: ai.b-bug.org:5000/huangziyi/web-docs-builder:3d9c3f0b2be1fe67b3b2f4e5d47504f6c2662b76
+  environment:
+    name: dev
+    url: https://ai.b-bug.org/k230/linux_sdk_docs/dev/
+  script:
+    - git fetch --all --tags
+    - git checkout dev
+    - git reset --hard origin/dev
+    - make mhtml
+    - rm -rf /data1/k230/linux_sdk_docs/*
+    - cp -r _build/* /data1/k230/linux_sdk_docs
+  artifacts:
+    paths:
+      - _build
+
+deploy production:
+  stage: deploy
+  tags:
+    - production
+  image: ai.b-bug.org:5000/huangziyi/deploy:v1
+  dependencies:
+    - build web docs
+  needs:
+    - build web docs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
+  environment:
+    name: production
+    url: https://developer.canaan-creative.com/k230_linux_sdk/dev/index.html
+  script:
+    - cp -r _build/* /data/website/docs/k230_linux_sdk/

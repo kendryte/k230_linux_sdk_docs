@@ -16,31 +16,12 @@
 
 ### 2.2 人脸检测
 
-人脸检测demo输入源为RGB planner的图片，后期摄像头开发完成后，会使用摄像头做为输入源。此demo仅用于演示KPU、nncase有关AI方面的功能。
+人脸检测demo输入源为摄像头，并将结果显示在屏幕上，此demo仅用于演示KPU、nncase有关AI方面的功能。
 
-源码位置`buildroot-overlay\package\face_detect`，可执行程序放置在`output/k230_canmv_defconfig/target/app/face_detect`，在板子上进入 `/app/face_detct`，执行 run.sh即可。会打印识别的人脸及五点信息。
+源码位置`buildroot-overlay\package\face_detect`，可执行程序放置在`output/k230_canmv_defconfig/target/app/face_detect`，在板子上进入 `/app/face_detct`，执行 `./face_detect.elf face_detection_320.kmodel` 即可。会在屏幕上框出人脸的位置。
 
-```shell
-[root@canaan /app/face_detect ]#./run.sh
-case ./face_detect.elf built at Aug  5 2024 11:07:25
-output tensor idx: 0
-output tensor idx: 1
-output tensor idx: 2
-output tensor idx: 3
-output tensor idx: 4
-output tensor idx: 5
-output tensor idx: 6
-output tensor idx: 7
-output tensor idx: 8
-Detection results for image: ai2d_input.bin
-Number of faces detected: 19
-Face 1:
-  Bounding box: (596, 215) to (652, 286)
-  Landmarks:
-    Point 1: (613, 241)
-    Point 2: (639, 241)
-    Point 3: (627, 254)
-    Point 4: (616, 267)
-    Point 5: (638, 266)
-...
-```
+![结果](https://developer.canaan-creative.com/api/post/attachment?id=428)
+
+### 2.3 摄像头采图显示
+
+v4l2-drm 从摄像头采集图像并显示到屏幕上，源码路径在 `buildroot-overlay/package/vvcam/v4l2-drm`，使用命令行 `v4l2-drm -d 1 -w 480 -h 320` 即可运行，`-d` 指定 video 设备，`-w` 指定图像宽度，`-h` 指定图像高度，`-f` 指定图像格式，支持 `NV12/NV16/BGR3/BG3P`，目前仅 `NV12` 和 `BGR3` 支持显示，`-s` 禁用显示（只采图），程序运行后按 `q` 退出，按 `d` 保存一张图片。可以同时打开多个设备，例如 `v4l2-drm -d 1 -w 480 -h 320 -d 2 -w 1920 -h 1080 -f BGR3 -s`.

@@ -22,7 +22,7 @@
 
 ### 2.3 人脸检测
 
-人脸检测demo输入源为RGB planner的图片，后期摄像头开发完成后，会使用摄像头做为输入源。此demo仅用于演示KPU、nncase有关AI方面的功能。
+人脸检测demo输入源为RGB planner的图片。此demo仅用于演示KPU、nncase有关AI方面的功能。
 
 源码位置`buildroot-overlay\package\face_detect`，可执行程序放置在`output/k230_canmv_defconfig/target/app/face_detect`，在板子上进入 `/app/face_detct`，执行 run.sh即可。会打印识别的人脸及五点信息。
 

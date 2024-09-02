@@ -23,7 +23,7 @@ extensions = [
     'myst_parser',
     'sphinx_multiversion'
 ]
-
+html_title = 'K230 Linux SDK'
 templates_path = ['_templates']
 exclude_patterns = []
 
@@ -32,7 +32,7 @@ language = 'zh_CN'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-myst_heading_anchors = 4
+myst_heading_anchors = 7
 suppress_warnings = ["myst.header"]
 
 html_copy_source = True
@@ -54,5 +54,8 @@ locale_dirs = ['locale']
 html_theme_options = {
     #"use_edit_page_button": True,
     "primary_sidebar_end": ["versionsFlex.html"],
+    "footer_start": ["Fleft.html"],
+	"footer_center": ["Footer.html"],
+	"footer_end" : ["Fright.html"]
 }
 

@@ -155,7 +155,9 @@ Windows下可通过rufus工具对TF卡进行烧录（rufus工具下载地址 `ht
 
 使用Type-C线连接CanMV-K230如下图的位置，线另一端连接至电脑
 
-![debug](https://gitee.com/kendryte/k230_docs/raw/main/zh/images/CanMV-K230_debug.png)
+![debug](https://developer.canaan-creative.com/k230_canmv/main/_images/CanMV-K230_front.png)
+
+![board-behind](https://developer.canaan-creative.com/k230_canmv/main/_images/CanMV-K230_behind.png)
 
 2)电脑上确认串口号：
 
@@ -187,11 +189,11 @@ linux系统下串口显示如下：
 >不插tf卡，按下reset按键，默认串口也会输出一行打印，看到打印说明cpu工作正常。
 >推荐串口软件是putty，其他串口软件(比如moblxterm xshell securecrt等)也可以。
 
-### 4.3k230d-canmv开发板连接(待更新图片)
+### 4.3k230d-canmv开发板连接
 
 1)参考下图连接k230d-canmv开发板
 
-![debug](https://gitee.com/kendryte/k230_docs/raw/main/zh/images/CanMV-K230_debug.png)
+![debug](https://developer.canaan-creative.com/api/post/attachment?id=426)
 
 >补充：需要硬件说明：
 >typec usb线

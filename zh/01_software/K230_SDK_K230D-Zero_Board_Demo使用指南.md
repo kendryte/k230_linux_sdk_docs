@@ -1,4 +1,4 @@
-# K230 SDK CanMV Board Demo使用指南
+# K230 SDK K230D Zero Board Demo使用指南
 
 ## 1. 概述
 

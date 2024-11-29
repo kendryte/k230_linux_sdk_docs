@@ -60,3 +60,133 @@ through -vcodec h264_v4l2m2m -b:v 10M -f rtp rtp://10.100.228.227:1233
 注意将其中的 `10.100.228.227` 改为 PC 的 IP 地址。
 
 ![ffplay](https://developer.canaan-creative.com/api/post/attachment?id=430)
+
+### 2.5 Audio
+
+#### 2.5.1 使用 `audio_demo` 实现音频录制和播放
+
+`audio_demo` 是一个运行在 K230 开发板上的示例程序，通过调用 ALSA（Advanced Linux Sound Architecture）API，实现音频的录制和播放功能。该示例程序不仅展示了如何在 K230 开发板上进行音频处理，还为开发者提供了使用 ALSA API 接口实现音频功能的参考代码。
+
+##### 录制 WAV 文件
+
+使用以下命令录制一个 WAV 格式的音频文件：
+
+```sh
+audio_demo -type 2 -filename test.wav -channels 2 -samplerate 16000
+```
+
+参数说明：
+
+- `-type 2`：指定操作类型为录制。
+- `-filename`：设置输出文件名。
+- `-channels`：录制通道数，`2` 为双声道。
+- `-samplerate`：设置采样率，单位为 Hz。
+
+录制15s后进程会自动退出(请勿录制过程中杀掉进程，否则会导致录制的文件异常)，音频文件保存在当前目录下的 `test.wav` 中。
+
+##### 播放 WAV 文件
+
+使用以下命令播放录制的 WAV 文件：
+
+```sh
+audio_demo -type 0 -filename test.wav
+```
+
+参数说明：
+
+- `-type 0`：指定操作类型为播放 WAV 文件。
+- `-filename`：要播放的文件名。
+
+##### 播放 MP3 文件
+
+`audio_demo` 也支持播放 MP3 格式的音频文件：
+
+```sh
+audio_demo -type 1 -filename example.mp3
+```
+
+参数说明：
+
+- `-type 1`：指定操作类型为播放 MP3 文件。
+- `-filename`：要播放的 MP3 文件名。
+
+#### 2.5.2 使用 FFmpeg 实现音频录制和播放
+
+##### 音频录制
+
+使用以下命令，通过FFmpeg调用ALSA接口录制声音，并保存为WAV文件：
+
+```bash
+ffmpeg -f alsa -i hw:0 -t 15 -ac 2 -ar 44100 -y test.wav
+```
+
+其中：
+
+- `-f alsa`：指定音频输入格式为ALSA。
+- `-i hw:0`：指定音频输入设备，`hw:0`表示默认音频设备。
+- `-t 15`：设置录制时长为15秒。
+- `-ac 2`：设置录制通道数为2（立体声）。
+- `-ar 44100`：设置采样率为44100Hz。
+- `-y test.wav`：输出文件名为`test.wav`。
+
+执行上述命令后，录制的声音将保存为WAV格式的音频文件`test.wav`。
+
+##### 音频播放
+
+使用 `ffmpeg` 播放音频文件：
+
+```sh
+ffmpeg -i test.wav -f alsa hw:0,0
+```
+
+#### 2.5.3 使用 `arecord` 和 `aplay` 实现音频录制和播放
+
+##### 录制音频
+
+```sh
+arecord -Dhw:0,0 -d 10 -f cd -r 44100 -c 2 -t wav test.wav
+```
+
+##### 播放音频
+
+```sh
+aplay -Dhw:0,0 -v test.wav
+```
+
+#### 2.5.4 音量控制
+
+使用 `amixer` 命令进行音量调节和静音控制：
+
+##### 音量控制
+
+- 查看控件列表：
+
+    ```sh
+    amixer controls
+    ```
+
+- 获取当前音量：
+
+    ```sh
+    amixer cget numid=1
+    ```
+
+- 设置音量为 12：
+
+    ```sh
+    amixer cset numid=1 12
+    ```
+
+##### 静音控制
+
+- 静音：
+
+    ```sh
+    amixer cset numid=2 0
+    ```
+
+- 取消静音：
+
+    ```sh
+    amixer cset numid=2 1
+    ```

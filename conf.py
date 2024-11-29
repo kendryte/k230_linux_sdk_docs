@@ -11,7 +11,7 @@ import datetime
 
 project = os.getenv('PROJECT') or 'K230 Linux SDK'
 copyright = str(datetime.datetime.now().year) + ' ' + (os.getenv('COPYRIGHT') or 'Canaan Inc')
-author = os.getenv('AUTHOR') or 'Canaan'
+# author = os.getenv('AUTHOR') or 'Canaan'
 # release = '0.1'
 root_doc = os.getenv('ROOT_DOC') or 'index'
 

@@ -21,7 +21,7 @@
 
 | 文档名称 | 文档概要 |
 | --- | --- |
-| [K230_linux_sdk教程.md](zh/01_software/K230_linux_sdk教程.md) | K230_linux_sdk教程|
+| [K230_linux_SDK使用指南.md](zh/01_software/K230_linux_SDK使用指南.md) | K230_linux_SDK使用指南|
 
 #### K230 SDK LINUX  nncase 文档
 

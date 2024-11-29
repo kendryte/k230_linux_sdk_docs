@@ -1,4 +1,4 @@
-# K230/K230D linux 教程
+# K230 linux SDK使用指南
 
 ## 1.K230/K230D芯片
 
@@ -48,7 +48,7 @@ tar -zxvf Xuantie-900-gcc-linux-6.6.0-glibc-x86_64-V2.10.1-20240712.tar.gz -C /o
 需要安装如下软件的 ubuntu22.04 或者ubuntu 24.04系统(参考安装命令)
 
 ```bash
-sudo apt-get inst wget all -y git sed make binutils build-essential diffutils gcc  g++ bash patch gzip bzip2 perl tar cpio unzip rsync file bc findutils wget libncurses-dev python3 libssl-dev  gawk cmake bison flex bash-completion
+sudo apt-get inst wget all -y git sed make binutils build-essential diffutils gcc  g++ bash patch gzip bzip2 perl tar cpio unzip rsync file bc findutils wget libncurses-dev python3 libssl-dev  gawk cmake bison flex bash-completion  parted curl
 ```
 
 >依赖软件包见tools/docker/Dockerfile 文件，构建和进入docker环境参考如下命令：

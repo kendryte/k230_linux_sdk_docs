@@ -23,6 +23,7 @@ AI Demo集成了人脸、人体、手部、车牌、单词续写等模块，包�
 ├── common
 ├── Config.in
 ├── crosswalk_detect
+├── demo_mix
 ├── dynamic_gesture
 ├── eye_gaze
 ├── face_alignment
@@ -45,6 +46,7 @@ AI Demo集成了人脸、人体、手部、车牌、单词续写等模块，包�
 ├── licence_det_rec
 ├── llamac
 ├── object_detect_yolov8n
+├── ocr
 ├── person_attr
 ├── person_detect
 ├── person_distance
@@ -117,11 +119,15 @@ make CONF=k230_canmv_defconfig face_detect
 make CONF=k230_canmv_defconfig
 ```
 
-注：
+**注**：
 
-a.若是make时报错，退出docker后，删除k230_linux_sdk，重新下载k230_linux_sdk，并重新执行（3）、（4）即可，之后会优化该问题。
+a.若是make时下载依赖速度很慢，可以make时添加BR2_PRIMARY_SITE选项
 
-b.手动构建的sysimage-sdcard.img.gz，/app默认挂载是256M，若是256M不够用，可以通过修改k230_linux_sdk/buildroot-overlay/configs/k230_canmv_defconfig 下面的 BR2_TARGET_ROOTFS_EXT2_SIZE，然后重新 make CONF=k230_canmv_defconfig
+```shell
+make BR2_PRIMARY_SITE=https://kendryte-download.canaan-creative.com/k230/downloads/dl/ CONF=k230_canmv_defconfig face_detect
+```
+
+b.手动构建的sysimage-sdcard.img.gz，/app默认挂载是128M，若是128M不够用，可以通过修改k230_linux_sdk/buildroot-overlay/configs/k230_canmv_defconfig 下面的 BR2_TARGET_ROOTFS_EXT2_SIZE，然后重新 make CONF=k230_canmv_defconfig
 
 ```shell
 #修改为2G

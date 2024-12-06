@@ -1,6 +1,6 @@
-# K230 linux SENSOR 移植教程
+# K230 linux SENSOR 移植指南
 
-本文档主要描述K230平台Camera Sensor基本框架以及如何新增支持一款新的Camera Sensor。
+本文档主要描述K230平台Camera Sensor基本框架以及如何新增一款新的Camera Sensor。
 
 K230平台只支持mipi接口类型的sensor，我们以当前最常用的MIPI CSI接口Sensor为例进行说明。Sensor与主控平台的硬件连接示意图如下：
 
@@ -205,7 +205,7 @@ void vvcam_sensor_init(void) {
 
 ## 3. 编译sensor
 
-按照上边从新配置好新的sensor 之后，需要从新编译sensor，编译命令如下
+按照上边重新配置好新的sensor 之后，需要重新编译sensor，编译命令如下
 
 ```shell
 make vvcam-reconfigure
@@ -251,7 +251,7 @@ echo 0 manu_json=/etc/vvcam/imx335.xml > /proc/vsi/isp_subdev0
 echo 0 auto_json=/etc/vvcam/imx335.xml > /proc/vsi/isp_subdev0
 ```
 
-配置完成之后从新查看配置文件
+配置完成之后重新查看配置文件
 
 ```shell
 [root@canaan /sharefs/isp_linux ]#cat /proc/vsi/isp_subdev0
@@ -267,7 +267,7 @@ auto_json: /etc/vvcam/imx335.xml
 
 发现sensor 类型和配置文件都已经换成我们想要的配置文件和参数了
 
-从新执行isp_media_server，运行命令如下：
+重新执行isp_media_server，运行命令如下：
 
 ```shell
 ISP_MEDIA_SENSOR_DRIVER=/usr/lib/libvvcam.so /usr/bin/isp_media_server > /dev/null 2> /tmp/isp.err.log &
@@ -283,7 +283,7 @@ video0  video1  video2  video3  video4
 运行测试命令
 
 ```shell
-v4l2-drm -d 1 -w 640 -h 480
+v4l2-drm -d 1 -n 5 -w 640 -h 480
 ```
 
 测试效果如下：

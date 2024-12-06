@@ -10,6 +10,7 @@
    :maxdepth: 2
 
    zh/01_software/K230_linux_SDK使用指南.md
+   zh/01_software/K230_linux_SDK开发板适配指南.md
    zh/01_software/K230_SDK_CanMV_Board_Demo使用指南.md
    zh/01_software/K230_SDK_K230D-Zero_Board_Demo使用指南.md
    zh/01_software/K230_linux_SENSOR移植指南.md
@@ -17,6 +18,7 @@
    zh/01_software/K230_linux_UVC使用指南.md
    zh/01_software/K230_Opencv调用UVC指南.md
    zh/01_software/K230_linux_WiFi使用指南.md
+   zh/01_software/K230_linux_2.5D_GPU使用指南.md
    zh/01_software/K230_debian_ubuntu等发行版说明.md
    zh/01_software/K230_AI_Demo使用指南.md
    zh/K230_Linux_SDK_版本说明.md

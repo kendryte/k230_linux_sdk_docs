@@ -1,4 +1,4 @@
-# K230_linux_Opencv调用UVC指南
+# Opencv调用UVC指南
 
 ## 概述
 
@@ -286,4 +286,4 @@ cap.release()
 
 ### 参考连接
 
-[K230_Opencv调用UVC指南](https://developer.canaan-creative.com/k230/zh/dev/02_applications/tutorials/K230_Opencv%E8%B0%83%E7%94%A8UVC%E6%8C%87%E5%8D%97.html#id1)
+[K230_Opencv调用UVC指南](https://www.kendryte.com/k230/zh/dev/02_applications/tutorials/K230_Opencv%E8%B0%83%E7%94%A8UVC%E6%8C%87%E5%8D%97.html#id1)

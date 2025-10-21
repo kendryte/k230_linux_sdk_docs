@@ -10,7 +10,7 @@ import datetime
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = os.getenv('PROJECT') or 'K230 Linux SDK'
-copyright = str(datetime.datetime.now().year) + ' ' + (os.getenv('COPYRIGHT') or 'Canaan Inc')
+copyright = str(datetime.datetime.now().year) + ' 嘉楠 | ' + '京ICP备2025124317号 | 京公网安备11010802045870号'
 # author = os.getenv('AUTHOR') or 'Canaan'
 # release = '0.1'
 root_doc = os.getenv('ROOT_DOC') or 'index'
@@ -21,8 +21,17 @@ root_doc = os.getenv('ROOT_DOC') or 'index'
 extensions = [
     'sphinx_copybutton',
     'myst_parser',
-    'sphinx_multiversion'
+    'sphinx_multiversion',
 ]
+html_js_files = [
+    'mermaid.min.js',
+    'transform.js'
+]
+source_suffix = {
+   '.rst': 'restructuredtext',  
+    '.md': 'markdown',
+}
+
 html_title = 'K230 Linux SDK'
 templates_path = ['_templates']
 exclude_patterns = []
@@ -46,8 +55,12 @@ html_theme = "sphinx_book_theme"
 html_static_path = ['_static']
 
 # if want to add top nav for canann, enable this.
-html_css_files = ['topbar.css', 'custom-theme.css']
-
+html_css_files = ['topbar.css', 'custom-theme.css', 'auto-nums.css']
+html_js_files = [
+    'mermaid.min.js',
+    'init_mermaid.js',
+    'transform.js'
+]
 
 locale_dirs = ['locale']
 
@@ -56,6 +69,10 @@ html_theme_options = {
     "primary_sidebar_end": ["versionsFlex.html"],
     "footer_start": ["Fleft.html"],
 	"footer_center": ["Footer.html"],
-	"footer_end" : ["Fright.html"]
+	"footer_end" : ["Fright.html"],
+    "article_footer_items": ["content.html"],
+    "navbar_start" : ['logo.html'],
+    "navbar_center" : ['nav.html'],
+    "navbar_end" : ['login.html']
 }
 

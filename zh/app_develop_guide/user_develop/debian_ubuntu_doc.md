@@ -1,15 +1,15 @@
 # K230 debian ubuntu等发行版说明
 
-## 1.k230发行版概述
+## k230发行版概述
 
 k230支持debian和ubuntu发行版，发行版镜像编译方法见本的文后面章节。
 
 k230 debian镜像 支持pyqt,支持qt单界面显示(没有使用gpu)，ubuntu是命令行版本的镜像，如果需要其他软件，请使用apt-get进行安装。
 镜像的用户名和密码均为root
 
-## 2.debian发行版
+## debian发行版
 
-### 2.1 debian镜像编译
+### debian镜像编译
 
 参考如下命令可以生成debian镜像
 
@@ -34,7 +34,7 @@ Debian GNU/Linux trixie/sid k230 ttyS0
 k230 login: root
 ```
 
-### 2.2 debian rootfs更新
+### debian rootfs更新
 
 apt install可以安装软件包，类似如下：
 
@@ -151,10 +151,10 @@ tar  -czf debian13.tar.gz debian13
 
 
 You need to manually execute the above commands one by one on linux(not docker)
-referenc doc is <<https://developer.canaan-creative.com/k230/zh/dev/03_other/K230_debian_ubuntu%E8%AF%B4%E6%98%8E.html>>
+referenc doc is <<https://www.kendryte.com/k230/zh/dev/03_other/K230_debian_ubuntu%E8%AF%B4%E6%98%8E.html>>
 ```
 
-### 2.2 pyqt测试
+### pyqt测试
 
 执行如下命令可以在hdmi显示器上看到pyqt输出的文字：
 
@@ -203,9 +203,9 @@ if __name__ == '__main__':
 root@k230:~#
 ```
 
-## 3.ubuntu发行版
+## ubuntu发行版
 
-### 3.1 debian镜像编译
+### debian镜像编译
 
 参考如下命令可以生成k230 ubuntu镜像
 
@@ -222,7 +222,7 @@ sudo make ubuntu # ubuntu
 output/k230_canmv_01studio_defconfig/images/CanMV-K230_01studio_ubuntu_v0.5_nncase_v2.9.0.img.gz
 把上述镜像解压缩并烧录到tf卡，把tf卡插入设备，重启设备，通过串口可以看到ubuntu的启动输出。
 
-### 2.2 debian rootfs更新
+### debian rootfs更新
 
 apt install可以安装软件包，类似如下：
 
@@ -286,9 +286,9 @@ sudo tar -czf ubuntu24.tar.gz ubuntu24
 
 
 You need to manually execute the above commands one by one on linux(not docker)
-referenc doc is <<https://developer.canaan-creative.com/k230/zh/dev/03_other/K230_debian_ubuntu%E8%AF%B4%E6%98%8E.html>>
+referenc doc is <<https://www.kendryte.com/k230/zh/dev/03_other/K230_debian_ubuntu%E8%AF%B4%E6%98%8E.html>>
 ```
 
-## 4.参考文档
+## 参考文档
 
-<<https://developer.canaan-creative.com/k230/zh/dev/03_other/K230_debian_ubuntu%E8%AF%B4%E6%98%8E.html>>
+<<https://www.kendryte.com/k230/zh/dev/03_other/K230_debian_ubuntu%E8%AF%B4%E6%98%8E.html>>

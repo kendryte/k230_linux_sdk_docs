@@ -1,12 +1,12 @@
 # K230 linux sdk 适配指南
 
-## 1.文档目的
+## 文档目的
 
 本文旨在介绍当开发人员使用非k230_linux_sdk支持的标准开发板时，如何修改k230_linux_sdk，使其适配新的板子。
 
 参考k230d_canmv开发板的源码文件。
 
-## 2.uboot适配
+## uboot适配
 
 ### step 1
 
@@ -156,7 +156,7 @@ CONFIG_ARCH_RV64I=y
 ...
 ```
 
-## 3.linux适配
+## linux适配
 
 ### step 1
 
@@ -188,7 +188,7 @@ linux的编译配置可以使用默认的k230_defconfig，如果有特殊需求�
 cp k230_defconfig k230_${board_name}_defconfig
 ```
 
-## 4.k230_linux_sdk适配
+## k230_linux_sdk适配
 
 ### step 1
 
@@ -212,15 +212,15 @@ BR2_TARGET_UBOOT_BOARDNAME="k230_${board_name}"
 ...
 ```
 
-## 5.开发板ROM电压适配
+## 开发板ROM电压适配
 
 ### step 1
 
 根据板子设计使用 K230 OTP配置工具 生成otp.bin。参考k230d canmv原理图，ROM串口使用IO38/IO39，bank电压为3V3，OSPI IO电压BANK3为3V3，SDIO0为3V3，SDIO1 IO电压BANK2为3V3
 
-![bank_vol](https://developer.canaan-creative.com/api/post/attachment?id=447)
+![bank_vol](https://www.kendryte.com/api/post/attachment?id=447)
 
-![otp_config](https://developer.canaan-creative.com/api/post/attachment?id=446)
+![otp_config](https://www.kendryte.com/api/post/attachment?id=446)
 
 ### step 2
 
@@ -230,12 +230,12 @@ BR2_TARGET_UBOOT_BOARDNAME="k230_${board_name}"
 k230_flash_cli> .\k230_flash_cli.exe -m OTP 0  .\img\K230D-otp-1731400641587.bin
 ```
 
-## 6.附录A
+## 附录A
 
 IOMUX节点的配置，需要参考板子原理图 和 iomux表。没有用的IO建议配置为GPIO功能，避免同一个功能连接到了多个IO。无论大核使用IO还是小核使用IO，IO的功能配置统一放在uboot。
 每个IO用作什么功能在设计硬件的时候已经确定，适配SDK时参考原理图配置。以下图的IO7为例：
 
-![gpio7](https://developer.canaan-creative.com/api/post/attachment?id=445)
+![gpio7](https://www.kendryte.com/api/post/attachment?id=445)
 
 BANK0_GPIO7 复用为了I2C4_SCL功能，连接摄像头。
 
@@ -255,12 +255,12 @@ BANK0_GPIO7 复用为了I2C4_SCL功能，连接摄像头。
 - PU上拉配置，与IO的功能有关。IIC总线，空闲是高电平，所以建议配置上拉。一般硬件设计外部会有上拉，所以IOMUX配置不上拉也没有问题。
 - PD下拉配置，与IO的功能有关。
 
-![pull_resistor](https://developer.canaan-creative.com/api/post/attachment?id=443)
+![pull_resistor](https://www.kendryte.com/api/post/attachment?id=443)
 
 - DS驱动强度配置，单电压PAD为8驱PAD，3bit有效，取值为4’b000~4’b111。双电压PAD为16驱PAD，4bit有效，取值为4’b0000~4’b1111，IO2~IO63都是双电压PAD。
 
-![iol](https://developer.canaan-creative.com/api/post/attachment?id=442)
+![iol](https://www.kendryte.com/api/post/attachment?id=442)
 
-![ioh](https://developer.canaan-creative.com/api/post/attachment?id=441)
+![ioh](https://www.kendryte.com/api/post/attachment?id=441)
 
 - ST输入施密特触发器配置，一般配置为1

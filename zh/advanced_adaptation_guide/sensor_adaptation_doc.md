@@ -4,11 +4,11 @@
 
 K230平台只支持mipi接口类型的sensor，我们以当前最常用的MIPI CSI接口Sensor为例进行说明。Sensor与主控平台的硬件连接示意图如下：
 
-![文本, 信件 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=464)
+![文本, 信件 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=464)
 
 主控通过I2C接口下发配置寄存器控制sensor的工作方式，sensor通过MIPI CSI接口将图像数据发送至主控SOC。
 
-## 1. Sensor适配准备工作
+## Sensor适配准备工作
 
 用户在适配新的sensor之前需要做以下一些准备工作：
 
@@ -20,7 +20,7 @@ K230平台只支持mipi接口类型的sensor，我们以当前最常用的MIPI C
 1. 确认 wdr mode 是 VC、DT 或者 DOL 等。
 1. 确认不同时序是否需要图像裁剪。
 
-## 2. Sensor适配示例
+## Sensor适配示例
 
 本节将按照如何增加支持一个新的camera sensor的步骤来进行详细描述。
 
@@ -30,7 +30,7 @@ K230平台只支持mipi接口类型的sensor，我们以当前最常用的MIPI C
 k230_linux_sdk/buildroot-overlay/package/vvcam/src/
 ```
 
-### 2.1 定义支持的sensor类型
+### 定义支持的sensor类型
 
 查看当前linux sensor 的默认配置
 
@@ -48,11 +48,11 @@ auto_json: /etc/vvcam/ov5647.auto.json
 
 可以看出当前的默认sensor 是 ov5647、对应的配置文件在/etc/vvcam/ 目录下的ov5647.manual.json，ov5647.xml，ov5647.auto.json。
 
-### 2.2 sensor驱动适配
+### sensor驱动适配
 
 sensor驱动适配在整个环节中最重要的环节，用户可以通过拷贝现有的sensor驱动文件来修改，其中关于sensor的AE相关寄存器配置和计算方式需要查看对应的手册或者寻求专业人事协助。
 
-#### 2.2.1 定义sensor寄存器配置列表
+#### 定义sensor寄存器配置列表
 
 sensor寄存器配置由数据类型 k_sensor_reg_list 定义：
 
@@ -81,7 +81,7 @@ static const reg_list ov5647_1920x1080_30fps[] = {
 };
 ```
 
-#### 2.2.2 定义sensor支持的模式
+#### 定义sensor支持的模式
 
 sensor的模式参数由数据类型ov5647_mode 定义
 
@@ -151,7 +151,7 @@ static struct ov5647_mode modes[] = {
 };
 ```
 
-#### 2.2.3 实现sensor操作接口
+#### 实现sensor操作接口
 
 sensor的操作接口由数据类型k_sensor_function定义，用户根据实际情况实现相关的操作接口，不是所有接口都必须实现。
 
@@ -188,7 +188,7 @@ struct vvcam_sensor vvcam_ov5647 = {
 };
 ```
 
-#### 2.2.4 更新sensor驱动列表
+#### 更新sensor驱动列表
 
 将上一节定义的sensor驱动结构体添加到lib.c中的vvcam_sensor_init 的函数中。
 当前系统支持的sensor列表如下：
@@ -203,7 +203,7 @@ void vvcam_sensor_init(void) {
 }
 ```
 
-## 3. 编译sensor
+## 编译sensor
 
 按照上边重新配置好新的sensor 之后，需要重新编译sensor，编译命令如下
 
@@ -217,7 +217,7 @@ make vvcam-reconfigure
 k230_linux_sdk/output/k230_canmv_defconfig/target/usr/lib/libvvcam.so
 ```
 
-## 4. 运行sensor
+## 运行sensor
 
 替换新的libvvcam.so 到 开发板 /usr/lib 下，然后修改对应的配置文件和sensor，配置命令如下。
 
@@ -288,4 +288,4 @@ v4l2-drm -d 1 -n 5 -w 640 -h 480
 
 测试效果如下：
 
-![文本, 信件 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=465)
+![文本, 信件 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=465)

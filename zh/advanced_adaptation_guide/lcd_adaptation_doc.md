@@ -2,7 +2,7 @@
 
 本文档主要介绍视频输出系统控制模块的功能和用法，其它模块的功能和用法将各有专门的文档加以论述。
 
-## 1. 概述
+## 概述
 
 VO（Video Output，视频输出）模块主动从内存相应位置读取视频和图形数据，并通过相应的显示设备输出视频和图形。芯片支持的显示/回写设备、视频层和图形层情况。
 
@@ -29,11 +29,11 @@ OSD 层支持
 | ARGB 265 等级ALPHA | √                                                         | √                                                         | √                                                         | √                                                         |
 | 独立开关           | √                                                         | √                                                         | √                                                         | √                                                         |
 
-## 2. 软件描述
+## 软件描述
 
 视频输出软件配置分为3部分配置：phy 配置、dsi配置、VO配置，
 
-### 2.1计算phy的pll
+### 计算phy的pll
 
 数据速率由 PLL 输出时钟相位频率的两倍给出：数据速率 (Gbps) = PLL Fout(GHz) \* 2，输出频率是输入参考频率和倍频/分频比的函数。 计算phy 的pll共分为4种范围做的计算，不同的频率对应着不同的频率，它可以通过以下方式确定：
 
@@ -44,25 +44,25 @@ OSD 层支持
 
 For：
 
-![文本, 信件 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=449)
+![文本, 信件 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=449)
 
 然而在这个需要遵循下边的限制：
 
-![图片包含 文本 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=450)
+![图片包含 文本 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=450)
 
 For：
 
-![文本, 信件 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=451)
+![文本, 信件 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=451)
 
 For：
 
-![文本, 信件 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=473)
+![文本, 信件 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=473)
 
-![文本 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=453)
+![文本 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=453)
 
 For：
 
-![文本 中度可信度描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=454)
+![文本 中度可信度描述已自动生成](https://www.kendryte.com/api/post/attachment?id=454)
 
 上边的每一个for 对应着一个pll的等级、不同的等级对应着不同的计算公式和限制，计算示例如下：
 
@@ -74,39 +74,39 @@ mipi 的速率为 445.5M：所以pll的速率就是222.75M，应该选择第二�
 
 222.75n + 198.75 = 12m ，通过excel 计算如下：
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=455)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=455)
 
 得出来的m = 295 ，n = 15。
 
 配置pll中的m 和n都是整数值、如果所有的值都不是整数，就需要在m 和 n的值做加1和减1处理、反推回去看哪个频率理你需要的最近，再去验证是否可用，不可以就重复上边的操作。
 
-### 2.2 配置phy的voc
+### 配置phy的voc
 
 配置phy 的voc 可以根据表格查询即可：
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=456)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=456)
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=457)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=457)
 
 Example：
 
 mipi 的速率为 445.5M：所以pll的速率就是222.75M，voc = 010111 = 0x17
 
-### 2.3 配置freq
+### 配置freq
 
 配置phy 的freq 可以根据表格查询即可：
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=458)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=458)
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=459)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=459)
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=460)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=460)
 
 Example：
 
 mipi 的速率为 445.5M：pll的速率就是222.75M，freq 选择0100101, 配置这个的时候需要将最高位bit\[7\] = 1，所有freq = 10100101= 0xa5
 
-### 2.3 配置中断
+### 配置中断
 
 drm 需要中断来触发每次的切换显示，下边是中断的计算和配置
 
@@ -130,7 +130,7 @@ linux/arch/riscv/boot/dts/canaan/display-st7701-480x800.dtsi ：
 
 配置值为10， 2^10 = 1024 行 。
 
-### 2.4 配置lcd驱动和时序
+### 配置lcd驱动和时序
 
 配置屏幕采用的是dsi 发送LP 的命令方式配置，具体的配置如下：
 
@@ -287,7 +287,7 @@ display-timings {
 
 hsa、hbp、bfp hact 的单位都是pix， vsa、vbp、vfp vact 的单位都是行。
 
-### 2.5 phy 的配置
+### phy 的配置
 
 因为phy 的频率都是手动计算出来的不能自动计算出来、所以需要配置一下phy 的参数、配置方法如下
 
@@ -361,7 +361,7 @@ static void canaan_dsi_encoder_enable(struct drm_encoder *encoder)
 
 首先配置pix clk，pix 计算如下：
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=461)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=461)
 
 只需要需改div 即可，Bpi 的板子配置pix clk 为 39.6M，根据上边 div = 15 ，但是配置从0 开始的，所以需要减1，div = （查表值） - 1
 
@@ -373,7 +373,7 @@ linux/drivers/gpu/drm/canaan/canaan_dsi.c：
 k230_dsi_config_4lan_phy(dsi, TXPHY_475_M, TXPHY_475_N, TXPHY_475_VOC, TXPHY_475_HS_FREQ);
 ```
 
-## 3.HDMI 支持
+## HDMI 支持
 
 目前在k230 canmv 和k230 01 studio 上都支持了 hdmi 显示，配置如下
 
@@ -438,7 +438,7 @@ linux/arch/riscv/boot/dts/canaan/k230-canmv.dts
 
 主要是增加了lt9611 brange 芯片，需要移植可以参考这个dts
 
-## 4.测试
+## 测试
 
 本次测试采用的是modetest 的测试命令，具体测试如下
 
@@ -699,7 +699,7 @@ modetest -M canaan-drm  -D 0 -a -s 48@46:1920x1080 -P 39@46:640x480@RG16 -v -F t
 
 测试效果如下：
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=462)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=462)
 
 测试layer层
 
@@ -709,4 +709,4 @@ modetest -M canaan-drm  -D 0 -a -s 48@46:1920x1080 -P 43@46:640x480@NV12 -v -F t
 
 测试效果如下：
 
-![表格 描述已自动生成](https://developer.canaan-creative.com/api/post/attachment?id=462)
+![表格 描述已自动生成](https://www.kendryte.com/api/post/attachment?id=462)

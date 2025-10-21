@@ -1,20 +1,20 @@
 # K230 SDK CanMV Board Demo使用指南
 
-## 1. 概述
+## 概述
 
-## 2. Demo介绍
+## Demo介绍
 
-### 2.1 GPU
+### GPU
 
 源码路径在 `buildroot-overlay/package/vg_lite`，包含 5 个示例程序
 
 - tiger: 渲染一张 640x480 的老虎图片并保存为 tiger.png
 
-![tiger](https://developer.canaan-creative.com/api/post/attachment?id=422)
+![tiger](https://www.kendryte.com/api/post/attachment?id=422)
 
 - linearGrad: 渲染一张渐变图案并保存为 linearGrad.png
 
-![linearGrad](https://developer.canaan-creative.com/api/post/attachment?id=423)
+![linearGrad](https://www.kendryte.com/api/post/attachment?id=423)
 
 - imgIndex: 渲染四张使用颜色查找表的图像并保存为 png 文件
 
@@ -22,15 +22,15 @@
 
 - vglite_cube: 在屏幕上显示使用 GPU 绘制的一个正方体边框
 
-### 2.2 人脸检测
+### 人脸检测
 
 人脸检测demo输入源为摄像头，并将结果显示在屏幕上，此demo仅用于演示KPU、nncase有关AI方面的功能。
 
 源码位置`buildroot-overlay\package\face_detect`，可执行程序放置在`output/k230_canmv_defconfig/target/app/face_detect`，在板子上进入 `/app/face_detct`，执行 `./face_detect.elf face_detection_320.kmodel` 即可。会在屏幕上框出人脸的位置。
 
-![结果](https://developer.canaan-creative.com/api/post/attachment?id=429)
+![结果](https://www.kendryte.com/api/post/attachment?id=429)
 
-### 2.3 摄像头采图显示
+### 摄像头采图显示
 
 v4l2-drm 从摄像头采集图像并显示到屏幕上，源码路径在 `buildroot-overlay/package/vvcam/v4l2-drm`
 
@@ -46,7 +46,7 @@ v4l2-drm 从摄像头采集图像并显示到屏幕上，源码路径在 `buildr
 
 `-s` 禁用显示（只采图），程序运行后按 `q` 退出，按 `d` 保存一张图片。可以同时打开多个设备，例如 `v4l2-drm -d 1 -w 480 -h 320 -d 2 -w 1920 -h 1080 -f BGR3 -s`.
 
-### 2.4 摄像头采图推流
+### 摄像头采图推流
 
 可以使用 ffmpeg 打开 `/dev/video1` 设备进行编码和推流到 PC，首先在PC上安装 ffmpeg，然后创建一个 `test.sdp` 文件，填入如下内容
 
@@ -79,11 +79,11 @@ through -vcodec h264_v4l2m2m -b:v 10M -f rtp rtp://10.100.228.227:1233
 
 注意将其中的 `10.100.228.227` 改为 PC 的 IP 地址。
 
-![ffplay](https://developer.canaan-creative.com/api/post/attachment?id=430)
+![ffplay](https://www.kendryte.com/api/post/attachment?id=430)
 
-### 2.5 Audio
+### Audio
 
-#### 2.5.1 使用 `audio_demo` 实现音频录制和播放
+#### 使用 `audio_demo` 实现音频录制和播放
 
 `audio_demo` 是一个运行在 K230 开发板上的示例程序，通过调用 ALSA（Advanced Linux Sound Architecture）API，实现音频的录制和播放功能。该示例程序不仅展示了如何在 K230 开发板上进行音频处理，还为开发者提供了使用 ALSA API 接口实现音频功能的参考代码。
 
@@ -130,7 +130,7 @@ audio_demo -type 1 -filename example.mp3
 - `-type 1`：指定操作类型为播放 MP3 文件。
 - `-filename`：要播放的 MP3 文件名。
 
-#### 2.5.2 使用 FFmpeg 实现音频录制和播放
+#### 使用 FFmpeg 实现音频录制和播放
 
 ##### 音频录制
 
@@ -159,7 +159,7 @@ ffmpeg -f alsa -i hw:0 -t 15 -ac 2 -ar 44100 -y test.wav
 ffmpeg -i test.wav -f alsa hw:0,0
 ```
 
-#### 2.5.3 使用 `arecord` 和 `aplay` 实现音频录制和播放
+#### 使用 `arecord` 和 `aplay` 实现音频录制和播放
 
 ##### 录制音频
 
@@ -173,7 +173,7 @@ arecord -Dhw:0,0 -d 10 -f cd -r 44100 -c 2 -t wav test.wav
 aplay -Dhw:0,0 -v test.wav
 ```
 
-#### 2.5.4 音量控制
+#### 音量控制
 
 使用 `amixer` 命令进行音量调节和静音控制：
 

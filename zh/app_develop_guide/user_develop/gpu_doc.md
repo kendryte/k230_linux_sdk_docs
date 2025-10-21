@@ -35,7 +35,7 @@ K230 CanMV 有一个 HDMI 接口，在小核linux上可以用 DRM 进行显示�
 
 需要注意 DRM 的颜色格式名称与 `vg_lite_buffer_format_t` 并不完全一致，例如 `VGLITE_BGRA8888` 表示的是红色在低8位，alpha在高8位的32位颜色，对应 DRM 中的 `DRM_FORMAT_ARGB8888`。
 
-![vglite_drm demo 运行结果](https://developer.canaan-creative.com/api/post/attachment?id=474)
+![vglite_drm demo 运行结果](https://www.kendryte.com/api/post/attachment?id=474)
 
 如图是 vglite_drm 运行后屏幕正确显示的颜色：R(255)G(128)B(16)
 
@@ -193,7 +193,7 @@ vg_lite_scale(500., 500., &matrix);
 
 最后绘制的图案就像下面这样了
 
-![近似圆角的扇形](https://developer.canaan-creative.com/api/post/attachment?id=475)
+![近似圆角的扇形](https://www.kendryte.com/api/post/attachment?id=475)
 
 ### 位图填充
 

@@ -73,7 +73,7 @@ markdown-link-check:
     # MR job
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   stage: lint
-  timeout: 10m
+  timeout: 15m
   retry: 2
   image: ai.b-bug.org:5000/markdown:latest
   script:
@@ -223,6 +223,6 @@ deploy production:
     - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main")
   environment:
     name: production
-    url: https://developer.canaan-creative.com/k230_linux_sdk/dev/index.html
+    url: https://www.kendryte.com/k230_linux_sdk/dev/index.html
   script:
     - cp -r _build/* /data/website/docs/k230_linux_sdk/
